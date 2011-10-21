@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+	<TextView android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:text="@string/textview_how_to_use" />
+
+	<Button android:layout_height="wrap_content" android:text="@string/button_select_file"
+		android:layout_width="wrap_content" android:id="@+id/button_select_file" android:onClick="onSelectFileButtonClick" android:layout_marginTop="@dimen/margin_paragraph"></Button>
+	<EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/edittext_file_path"
+		android:hint='@string/edittext_hint_file_path' android:layout_marginTop="@dimen/margin_paragraph" android:inputType="textUri"></EditText>
+	<Button android:layout_height="wrap_content"
+		android:layout_width="wrap_content" android:id="@+id/button_input_file"
+		android:text="@string/button_input_file" android:onClick="onOpenFileButtonClick"></Button>
+	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button_go_settings" android:text="@string/button_go_settings" android:layout_marginTop="@dimen/margin_paragraph" android:onClick="onGoSettingsButtonClick"></Button>
+</LinearLayout>

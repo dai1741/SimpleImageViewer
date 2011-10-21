@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="pref_entries_max_imagesize">
+		<item>低</item>
+		<item>中</item>
+		<item>高</item>
+		<item>カスタム</item>
+	</string-array>
+	<string-array name="pref_entries_screen_orientation">
+		<item>全体の設定に合わせる</item>
+		<item>縦長</item>
+		<item>横長</item>
+	</string-array>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="@string/pref_category_max_imagesize">
+		<ListPreference android:entries="@array/pref_entries_max_imagesize"
+			android:entryValues="@array/pref_entryvalues_max_imagesize"
+			android:summary="@string/pref_summary_max_imagesize" android:title="@string/pref_title_max_imagesize"
+			android:key="@string/pref_key_max_imagesize" android:defaultValue="1"></ListPreference>
+		<jp.dai1741.android.preference.EditIntTextPreference
+			android:defaultValue="@string/pref_default_custom_max_imagesize"
+			android:layout="@layout/preference_child_expandable" android:summary="@string/pref_summary_custom_max_imagesize"
+			android:key="@string/pref_key_custom_max_imagesize" android:title="@string/pref_title_custom_max_imagesize"></jp.dai1741.android.preference.EditIntTextPreference>
+
+	</PreferenceCategory>
+	<PreferenceCategory android:title="@string/pref_category_screen_orientation">
+		<ListPreference android:entries="@array/pref_entries_screen_orientation"
+			android:entryValues="@array/pref_entryvalues_screen_orientation"
+			android:summary="@string/pref_summary_screen_orientation"
+			android:title="@string/pref_title_screen_orientation" android:key="@string/pref_key_screen_orientation"
+			android:defaultValue="1"></ListPreference>
+	</PreferenceCategory>
+</PreferenceScreen>

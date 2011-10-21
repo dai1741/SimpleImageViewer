@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">画像ビューア</string>
+	<string name="textview_how_to_use">ファイルエクスプローラー等からこのアプリを呼び出してください。\nこの画面からも画像を開くことができます。</string>
+	<string name="error_image_load_failed">画像の読み込みに失敗</string>
+	<string name="pref_category_max_imagesize">画質</string>
+	<string name="pref_title_max_imagesize">画質</string>
+	<string name="pref_summary_max_imagesize">メモリ不足エラーが出る場合は画質を落としてください</string>
+	<string name="pref_title_custom_max_imagesize">カスタム画質</string>
+	<string name="pref_summary_custom_max_imagesize">画像サイズ（横幅×縦幅）の上限をピクセル単位で入力。このサイズよりも大きい画像は縮小表示される</string>
+	<string name="pref_category_screen_orientation">画面の向き</string>
+	<string name="pref_title_screen_orientation">画面の向き</string>
+	<string name="pref_summary_screen_orientation">ビューアの画面の向きを変更する</string>
+	<string name="menu_title_set_preferences">設定</string>
+	<string name="menu_title_change_orientation">画面の回転</string>
+	<string name="menu_title_show_property">プロパティ</string>
+	<string name="file_property">ファイルプロパティ:\nファイル名: %1$s\nファイルサイズ: %2$dKB\n画像の大きさ: %3$s\n場所: %4$s\n\nビューアの状態:\n表示サイズ: %5$s\n%6$d of %7$d</string>
+	<string name="image_resolution">%1$d×%2$dpx</string>
+	<string name="toast_first_file">最初のファイル</string>
+	<string name="toast_last_file">最後のファイル</string>
+	<string name="button_select_file">エクスプローラーからファイルを選ぶ</string>
+	<string name="button_input_file">上のテキストボックスに入力したファイルを開く</string>
+	<string name="edittext_hint_file_path">ここにファイルのフルパスを入力</string>
+	<string name="error_file_path_empty">ファイルパスが未入力です</string>
+	<string name="error_invalid_file_path">ファイルパスが不正です</string>
+	<string name="error_no_file_in_directory">フォルダーにファイルがありません。\nフォルダーパス: %1$s</string>
+	<string name="button_go_settings">設定</string>
+	<string name="chooser_explorer">エクスプローラーを選択</string>
+</resources>

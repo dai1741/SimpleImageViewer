@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="pref_entryvalues_max_imagesize">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	<string-array name="pref_entries_max_imagesize">
+		<item>Low</item>
+		<item>Medium</item>
+		<item>High</item>
+		<item>Custom</item>
+	</string-array>
+	<string-array name="pref_entryvalues_screen_orientation">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	<string-array name="pref_entries_screen_orientation">
+		<item>Unspecified</item>
+		<item>Portrait</item>
+		<item>Landscape</item>
+	</string-array>
+</resources>

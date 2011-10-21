@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/menu_title_set_preferences" android:id="@+id/menu_set_preferences" android:icon="@android:drawable/ic_menu_preferences"></item>
+    <item android:title="@string/menu_title_change_orientation" android:id="@+id/menu_change_orientation" android:icon="@android:drawable/ic_menu_rotate"></item>
+    <item android:id="@+id/menu_show_property" android:title="@string/menu_title_show_property" android:icon="@android:drawable/ic_menu_info_details"></item>
+</menu>
