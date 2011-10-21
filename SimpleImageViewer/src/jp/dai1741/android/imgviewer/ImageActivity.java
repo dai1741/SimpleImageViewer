@@ -41,6 +41,8 @@ public class ImageActivity extends AbstractActivity {
     private static final String TAG = "ImageActivity";
     private static final String KEY_CURRENT_PATH = "current_path";
     private static final String KEY_CURRENT_ZOOM = "current_zoom";
+    private static final String KEY_ORIGINAL_WIDTH = "original_width";
+    private static final String KEY_ORIGINAL_HEIGHT = "original_height";
 
     /** Called when the activity is first created. */
     @Override
@@ -107,21 +109,10 @@ public class ImageActivity extends AbstractActivity {
         if (retainedBitmap == null) {
             mBitmapMakerTask = new BitmapMakerTask().execute(bitmapPath);
         }
-
-        // mImageView.setOnLongClickListener(new View.OnLongClickListener() {
-        //
-        // /*
-        // * 何か動かないと思ったら、内側のPinchableImageViewでcomsumeされてた
-        // * エンターキー押すとここが呼び出されるのはなぜ？
-        // */
-        // @Override
-        // public boolean onLongClick(View v) {
-        // Toast.makeText(ImageActivity.this,
-        // mFileIterator.current().getName(),
-        // Toast.LENGTH_SHORT).show();
-        // return false;
-        // }
-        // });
+        else {
+            mLastLoadedImageOriginalWidth = savedInstanceState.getInt(KEY_ORIGINAL_WIDTH);
+            mLastLoadedImageOriginalHeight = savedInstanceState.getInt(KEY_ORIGINAL_HEIGHT);
+        }
 
         mImageView.setAlphaChangeRate(ALPHA_CHANGE_RATE);
 
@@ -247,7 +238,7 @@ public class ImageActivity extends AbstractActivity {
                         android.R.drawable.ic_menu_close_clear_cancel);
                 if (ret == null) {
                     throw new InternalError(
-                            "failed to decode a premade drawable that is supporsed to");
+                            "failed to decode a premade drawable that is supposed to");
                 }
             }
             return ret;
@@ -283,8 +274,8 @@ public class ImageActivity extends AbstractActivity {
 
         int maxAllowedImageVolume = ViewerPreferenceManager.INSTANCE.getMaxImageSize();
 
-        mActualWidthOfLastLoadedImage = op.outWidth;
-        mActualHeightOfLastLoadedImage = op.outHeight;
+        mLastLoadedImageOriginalWidth = op.outWidth;
+        mLastLoadedImageOriginalHeight = op.outHeight;
         int volume = op.outWidth * op.outHeight;
         op.inSampleSize = 1 + (maxAllowedImageVolume > 0
                 ? volume / maxAllowedImageVolume
@@ -295,8 +286,8 @@ public class ImageActivity extends AbstractActivity {
 
     }
 
-    int mActualWidthOfLastLoadedImage;
-    int mActualHeightOfLastLoadedImage;
+    int mLastLoadedImageOriginalWidth;
+    int mLastLoadedImageOriginalHeight;
 
 
     @Override
@@ -309,6 +300,9 @@ public class ImageActivity extends AbstractActivity {
         if (mImageView != null) {
             outState.putString(KEY_CURRENT_ZOOM, mImageView.getZoomState().toString());
         }
+        //Point使いたいけど、API Level 8ではParcelableじゃない…
+        outState.putInt(KEY_ORIGINAL_WIDTH, mLastLoadedImageOriginalWidth);
+        outState.putInt(KEY_ORIGINAL_HEIGHT, mLastLoadedImageOriginalHeight);
     }
 
     @Override
@@ -332,6 +326,8 @@ public class ImageActivity extends AbstractActivity {
         return true;
     }
 
+    static boolean orientationInversed = false;
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -341,8 +337,10 @@ public class ImageActivity extends AbstractActivity {
             break;
 
         case R.id.menu_change_orientation:
-            setRequestedOrientation(ViewerPreferenceManager.INSTANCE
-                    .getInversedRequestedOrientation(this));
+            setRequestedOrientation(orientationInversed 
+                    ? ViewerPreferenceManager.INSTANCE.getRequestedOrientation()
+                    : ViewerPreferenceManager.INSTANCE.getInversedRequestedOrientation(this));
+            orientationInversed = !orientationInversed;
             break;
         case R.id.menu_show_property:
             String str;
@@ -352,8 +350,8 @@ public class ImageActivity extends AbstractActivity {
                         file.getName(), (int) (file.length() + 999) / 1000,
                         String.format(
                                 getResources().getString(R.string.image_resolution),
-                                mActualWidthOfLastLoadedImage,
-                                mActualHeightOfLastLoadedImage), file.getParent(),
+                                mLastLoadedImageOriginalWidth,
+                                mLastLoadedImageOriginalHeight), file.getParent(),
                         String.format(
                                 getResources().getString(R.string.image_resolution),
                                 mImageView.getBitmap().getWidth(), mImageView.getBitmap()
