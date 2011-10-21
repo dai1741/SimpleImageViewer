@@ -11,4 +11,8 @@
 		<item>縦長</item>
 		<item>横長</item>
 	</string-array>
+	<string-array name="pref_entries_initial_zoom">
+		<item>画面内に収める</item>
+		<item>元のサイズで表示</item>
+	</string-array>
 </resources>

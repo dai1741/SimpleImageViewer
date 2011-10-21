@@ -19,6 +19,7 @@
 	<string name="menu_title_set_preferences">Settings</string>
 	<string name="menu_title_change_orientation">Rotate Screen</string>
 	<string name="menu_title_show_property">Properties</string>
+	<string name="menu_title_open_with">Open with</string>
 	<string name="file_property">File properties:\nFilename: %1$s\nSize: %2$dKB\nResolution: %3$s\nPath: %4$s\n\nViewer status:\nDisplaying resolution: %5$s\n%6$d of %7$d</string>
 	<string name="image_resolution">%1$d x %2$dpx</string>
 	<string name="toast_first_file">First File</string>

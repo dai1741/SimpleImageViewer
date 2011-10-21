@@ -22,4 +22,14 @@
 		<item>Portrait</item>
 		<item>Landscape</item>
 	</string-array>
+	<string-array name="pref_entryvalues_initial_zoom">
+		<item>FIT_TO_WINDOW</item>
+		<item>FIT_TO_SHORT_WIDTH</item>
+		<item>NO_ZOOM</item>
+	</string-array>
+	<string-array name="pref_entries_initial_zoom">
+		<item>Fit to screen</item>
+		<item>Cover screen</item>
+		<item>No zoom</item>
+	</string-array>
 </resources>

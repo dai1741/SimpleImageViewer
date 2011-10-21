@@ -111,7 +111,8 @@ public class ImageActivity extends AbstractActivity {
         }
         else {
             mLastLoadedImageOriginalWidth = savedInstanceState.getInt(KEY_ORIGINAL_WIDTH);
-            mLastLoadedImageOriginalHeight = savedInstanceState.getInt(KEY_ORIGINAL_HEIGHT);
+            mLastLoadedImageOriginalHeight = savedInstanceState
+                    .getInt(KEY_ORIGINAL_HEIGHT);
         }
 
         mImageView.setAlphaChangeRate(ALPHA_CHANGE_RATE);
@@ -152,12 +153,14 @@ public class ImageActivity extends AbstractActivity {
                             && lengths.left < -v.getWidth() * MIN_TRANSISION_RATE;
                     boolean swipingRight = -diffX > MIN_TRANSISION_RATE
                             && lengths.right - mImageView.getBitmap().getWidth() > v
-                                    .getWidth() * MIN_TRANSISION_RATE;
+                                    .getWidth()
+                                    * MIN_TRANSISION_RATE;
                     boolean swipingTop = diffY > MIN_TRANSISION_RATE
                             && lengths.top < -v.getHeight() * MIN_TRANSISION_RATE;
                     boolean swipingBottom = -diffY > MIN_TRANSISION_RATE
                             && lengths.bottom - mImageView.getBitmap().getHeight() > v
-                                    .getHeight() * MIN_TRANSISION_RATE;
+                                    .getHeight()
+                                    * MIN_TRANSISION_RATE;
 
                     if (initialZoom == mImageView.getZoomRate()
                             && (swipingLeft ^ swipingRight || swipingTop ^ swipingBottom)) {
@@ -263,7 +266,8 @@ public class ImageActivity extends AbstractActivity {
      * http://www.hoge256.net/2009/08/432.html ここを参考に作成。ほぼコピペ
      * 処理が重いのでUIスレッドから呼ぶのはやめよう
      * 
-     * @param filePath null可
+     * @param filePath
+     *            null可
      * @return 作成したbitmap、もしくはnull
      */
     private Bitmap createSizeLimitedBitmap(String filePath) {
@@ -300,7 +304,7 @@ public class ImageActivity extends AbstractActivity {
         if (mImageView != null) {
             outState.putString(KEY_CURRENT_ZOOM, mImageView.getZoomState().toString());
         }
-        //Point使いたいけど、API Level 8ではParcelableじゃない…
+        // Point使いたいけど、API Level 8ではParcelableじゃない…
         outState.putInt(KEY_ORIGINAL_WIDTH, mLastLoadedImageOriginalWidth);
         outState.putInt(KEY_ORIGINAL_HEIGHT, mLastLoadedImageOriginalHeight);
     }
@@ -327,7 +331,7 @@ public class ImageActivity extends AbstractActivity {
     }
 
     static boolean orientationInversed = false;
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -337,40 +341,44 @@ public class ImageActivity extends AbstractActivity {
             break;
 
         case R.id.menu_change_orientation:
-            setRequestedOrientation(orientationInversed 
+            setRequestedOrientation(orientationInversed
                     ? ViewerPreferenceManager.INSTANCE.getRequestedOrientation()
-                    : ViewerPreferenceManager.INSTANCE.getInversedRequestedOrientation(this));
+                    : ViewerPreferenceManager.INSTANCE
+                            .getInversedRequestedOrientation(this));
             orientationInversed = !orientationInversed;
+            break;
+        case R.id.menu_open_with:
+            if (mFileIterator.size() != 0) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setDataAndType(Uri.fromFile(mFileIterator.current()), "image/*");
+                startActivity(i);
+            }
             break;
         case R.id.menu_show_property:
             String str;
             if (mFileIterator.size() != 0) {
                 File file = mFileIterator.current();
                 str = String.format(getResources().getString(R.string.file_property),
-                        file.getName(), (int) (file.length() + 999) / 1000,
-                        String.format(
-                                getResources().getString(R.string.image_resolution),
-                                mLastLoadedImageOriginalWidth,
-                                mLastLoadedImageOriginalHeight), file.getParent(),
-                        String.format(
-                                getResources().getString(R.string.image_resolution),
-                                mImageView.getBitmap().getWidth(), mImageView.getBitmap()
-                                        .getHeight()),
+                        file.getName(), (int) (file.length() + 999) / 1000, String
+                                .format(getResources().getString(
+                                        R.string.image_resolution),
+                                        mLastLoadedImageOriginalWidth,
+                                        mLastLoadedImageOriginalHeight),
+                        file.getParent(), String.format(getResources().getString(
+                                R.string.image_resolution), mImageView.getBitmap()
+                                .getWidth(), mImageView.getBitmap().getHeight()),
                         mFileIterator.getCurrentIndex() + 1, mFileIterator.size());
             }
             else {
-                str = String.format(
-                        getResources().getString(R.string.error_no_file_in_directory),
-                        "未実装です");
+                str = String.format(getResources().getString(
+                        R.string.error_no_file_in_directory), "未実装です");
             }
-            new AlertDialog.Builder(this)
-                    .setMessage(str)
-                    .setPositiveButton(R.string.button_ok,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            }).show();
+            new AlertDialog.Builder(this).setMessage(str).setPositiveButton(
+                    R.string.button_ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    }).show();
             // TODO:コピペできるようにする
             break;
         default:
