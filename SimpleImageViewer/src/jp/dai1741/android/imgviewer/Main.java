@@ -4,6 +4,7 @@ import static jp.dai1741.android.imgviewer.ImageViewerConstants.*;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -25,19 +26,22 @@ public class Main extends AbstractActivity {
     }
 
     public void onSelectFileButtonClick(View view) {
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
-        intent.setType("image/*");
-        startActivityForResult(
-                Intent.createChooser(intent,
-                        getResources().getString(R.string.chooser_explorer)),
-                REQUEST_CODE_IMAGE);
+        //本当はpickしたいわけじゃないけど、ACTION_VIEWだとエクスプローラーがヒットしない
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("file/*");
+        if (getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY).isEmpty()) {
+            Toast.makeText(this, R.string.error_no_explorer_found, Toast.LENGTH_LONG)
+                    .show();
+        }
+        else startActivityForResult(intent, REQUEST_CODE_IMAGE);
     }
 
     public void onOpenFileButtonClick(View view) {
         String uriString = ((EditText) findViewById(R.id.edittext_file_path)).getText()
                 .toString();
         if (uriString.length() == 0) {
-            Toast.makeText(Main.this, R.string.error_file_path_empty, Toast.LENGTH_SHORT)
+            Toast.makeText(this, R.string.error_file_path_empty, Toast.LENGTH_SHORT)
                     .show();
             return;
         }
@@ -65,7 +69,8 @@ public class Main extends AbstractActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK && data.getData() != null) {
+        if (requestCode == REQUEST_CODE_IMAGE && resultCode == RESULT_OK
+                && data.getData() != null) {
             Intent intent = new Intent(this, ImageActivity.class);
             intent.setData(data.getData());
             startActivity(intent);

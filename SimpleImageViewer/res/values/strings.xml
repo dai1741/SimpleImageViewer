@@ -30,6 +30,7 @@
 	<string name="edittext_hint_file_path">Input full file path here</string>
 	<string name="error_file_path_empty">File path is empty</string>
 	<string name="error_invalid_file_path">File path is invalid</string>
+	<string name="error_no_explorer_found">No explorer app found. Please get one with Market app.</string>
 	<string name="error_no_file_in_directory">No file exists in the directory.\nPath: %1$s</string>
 	<string name="button_go_settings">Settings...</string>
 	<string name="chooser_explorer">Open image from</string>

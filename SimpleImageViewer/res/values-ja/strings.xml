@@ -24,6 +24,7 @@
 	<string name="edittext_hint_file_path">ここにファイルのフルパスを入力</string>
 	<string name="error_file_path_empty">ファイルパスが未入力です</string>
 	<string name="error_invalid_file_path">ファイルパスが不正です</string>
+	<string name="error_no_explorer_found">エクスプローラがありません。マーケットから入手してください</string>
 	<string name="error_no_file_in_directory">フォルダーにファイルがありません。\nフォルダーパス: %1$s</string>
 	<string name="button_go_settings">設定</string>
 	<string name="chooser_explorer">エクスプローラーを選択</string>
