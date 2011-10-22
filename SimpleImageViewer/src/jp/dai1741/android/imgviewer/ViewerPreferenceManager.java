@@ -4,6 +4,7 @@ import static jp.dai1741.android.imgviewer.ImageViewerConstants.*;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
@@ -29,8 +30,7 @@ public enum ViewerPreferenceManager {
 
         Resources resources = mContext.getResources();
         // intにpersistすればいいんだけど、xmlからではできない？
-        int orientation = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(
-                mContext).getString(
+        int orientation = Integer.parseInt(getSharedPreferences().getString(
                 resources.getString(R.string.pref_key_screen_orientation), "1"));
         return orientation == PREF_ORIENTATION_AUTO
                 ? ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -44,8 +44,7 @@ public enum ViewerPreferenceManager {
     }
 
     /**
-     * @return {@link ActivityInfo.SCREEN_ORIENTATION_PORTRAIT} or
-     *         {@link ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}
+     * @return {@link ActivityInfo.SCREEN_ORIENTATION_PORTRAIT} or {@link ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE}
      */
     public int getInversedRequestedOrientation(Activity activity) {
         int orientation = getRequestedOrientation();
@@ -65,14 +64,11 @@ public enum ViewerPreferenceManager {
     public int getMaxImageSize() {
         // intで受け取れないのはなぜ？ --stringでpersistしてるからです
         // integer-array使えば？ --初期値がstringになるんだけど…
-        int val = Integer.parseInt(PreferenceManager
-                .getDefaultSharedPreferences(mContext).getString(
-                        mContext.getResources()
-                                .getString(R.string.pref_key_max_imagesize), "1"));
+        int val = Integer.parseInt(getSharedPreferences().getString(
+                mContext.getResources().getString(R.string.pref_key_max_imagesize), "1"));
 
         if (val == PREF_IMAGESIZE_CUSTOM) {
-            return Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(
-                    mContext).getString(
+            return Integer.parseInt(getSharedPreferences().getString(
                     mContext.getResources().getString(
                             R.string.pref_key_custom_max_imagesize), "10000"));
         }
@@ -80,6 +76,10 @@ public enum ViewerPreferenceManager {
             return VALUES_IMAGESIZE[val];
         }
 
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(mContext);
     }
 
 }
