@@ -14,6 +14,7 @@
 	<string name="menu_title_set_preferences">設定</string>
 	<string name="menu_title_change_orientation">画面の回転</string>
 	<string name="menu_title_show_property">プロパティ</string>
+	<string name="menu_title_open_with">他のアプリ</string>
 	<string name="file_property">ファイルプロパティ:\nファイル名: %1$s\nファイルサイズ: %2$dKB\n画像の大きさ: %3$s\n場所: %4$s\n\nビューアの状態:\n表示サイズ: %5$s\n%6$d of %7$d</string>
 	<string name="image_resolution">%1$d×%2$dpx</string>
 	<string name="toast_first_file">最初のファイル</string>
@@ -23,6 +24,7 @@
 	<string name="edittext_hint_file_path">ここにファイルのフルパスを入力</string>
 	<string name="error_file_path_empty">ファイルパスが未入力です</string>
 	<string name="error_invalid_file_path">ファイルパスが不正です</string>
+	<string name="error_no_explorer_found">エクスプローラがありません。マーケットから入手してください</string>
 	<string name="error_no_file_in_directory">フォルダーにファイルがありません。\nフォルダーパス: %1$s</string>
 	<string name="button_go_settings">設定</string>
 	<string name="chooser_explorer">エクスプローラーを選択</string>
