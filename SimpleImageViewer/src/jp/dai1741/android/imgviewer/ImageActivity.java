@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.Collections;
 
 /**
@@ -53,16 +54,19 @@ public class ImageActivity extends AbstractActivity {
         File f;
         String bundledPath = savedInstanceState != null ? savedInstanceState
                 .getString(KEY_CURRENT_PATH) : null;
+        Uri uri = getIntent().getData();
+        String scheme = uri != null ? uri.getScheme() : null;
+        boolean isUriContent = scheme != null ? scheme
+                .equals(ContentResolver.SCHEME_CONTENT) : false;
         if (bundledPath == null) {
-            Uri uri = getIntent().getData();
             // resolveの仕方：http://groups.google.com/group/android-group-japan/browse_thread/thread/84c6d026460c6ca6
-            if (uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+            if (isUriContent) {
                 Cursor c = getContentResolver().query(uri, null, null, null, null);
                 if (!c.moveToFirst()) throw new IllegalStateException(
                         "couldn't resolve the content uri:" + uri);
                 f = new File(c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA)));
             }
-            else if (uri.getScheme().equals(ContentResolver.SCHEME_FILE)) {
+            else if (scheme != null && scheme.equals(ContentResolver.SCHEME_FILE)) {
                 f = new File(uri.getPath());
             }
             else {
@@ -88,26 +92,33 @@ public class ImageActivity extends AbstractActivity {
                 .addView(mImageView = new PinchableImageView(this, retainedBitmap,
                         initialZoom));
 
-        String bitmapPath;
+        BitmapDecoder decoder;
         if (f.isFile()) {
             mFileIterator = FileIterator.inDirectoryOf(f, IMAGE_FILTER,
                     FileIterator.FileComparators.NATURAL);
-            bitmapPath = f.toString();
+            decoder = new BitmapDecoder.FileBitmapDecoder(f.toString());
         }
         else if (f.isDirectory()) {
             mFileIterator = FileIterator.in(f, IMAGE_FILTER,
                     FileIterator.FileComparators.NATURAL);
-            bitmapPath = mFileIterator.hasNext() ? mFileIterator.next().toString() : null;
+            String bitmapPath = mFileIterator.hasNext()
+                    ? mFileIterator.next().toString()
+                    : null;
+            decoder = new BitmapDecoder.FileBitmapDecoder(bitmapPath);
             if (LOG_D) {
                 Log.v(TAG, "given file is directory. resolved image path: " + bitmapPath);
             }
         }
+        else if (isUriContent) {
+            mFileIterator = DUMMY_ITERATOR;
+            decoder = new BitmapDecoder.ContentBitmapDecoder(this, uri);
+        }
         else {
             mFileIterator = DUMMY_ITERATOR;
-            bitmapPath = null;
+            decoder = null;
         }
         if (retainedBitmap == null) {
-            mBitmapMakerTask = new BitmapMakerTask().execute(bitmapPath);
+            mBitmapMakerTask = new BitmapMakerTask().execute(decoder);
         }
         else {
             mLastLoadedImageOriginalWidth = savedInstanceState.getInt(KEY_ORIGINAL_WIDTH);
@@ -222,10 +233,11 @@ public class ImageActivity extends AbstractActivity {
         mImageView.setBitmap(EMPTY_BITMAP, true);
         // ここにウェイト用のアイコンを入れる処理・・
 
-        mBitmapMakerTask = new BitmapMakerTask().execute(path);
+        mBitmapMakerTask = new BitmapMakerTask()
+                .execute(new BitmapDecoder.FileBitmapDecoder(path));
     }
 
-    class BitmapMakerTask extends AsyncTask<String, Boolean, Bitmap> {
+    class BitmapMakerTask extends AsyncTask<BitmapDecoder, Boolean, Bitmap> {
 
         @Override
         protected void onPreExecute() {
@@ -233,8 +245,14 @@ public class ImageActivity extends AbstractActivity {
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
-            Bitmap ret = createSizeLimitedBitmap(params[0]);
+        protected Bitmap doInBackground(BitmapDecoder... params) {
+            Bitmap ret = null;
+            try {
+                ret = createSizeLimitedBitmap(params[0]);
+            }
+            catch (IOException e) {
+                if (LOG_D) Log.v(TAG, "Failed to decode bitmap due to IOException");
+            }
             if (ret == null && !isCancelled()) {
                 publishProgress(true);
                 ret = BitmapFactory.decodeResource(getResources(),
@@ -266,14 +284,15 @@ public class ImageActivity extends AbstractActivity {
      * http://www.hoge256.net/2009/08/432.html ここを参考に作成。ほぼコピペ
      * 処理が重いのでUIスレッドから呼ぶのはやめよう
      * 
-     * @param filePath
-     *            null可
+     * @param decoder
+     *            null不可
      * @return 作成したbitmap、もしくはnull
+     * @throws IOException
      */
-    private Bitmap createSizeLimitedBitmap(String filePath) {
+    private Bitmap createSizeLimitedBitmap(BitmapDecoder decoder) throws IOException {
         BitmapFactory.Options op = new BitmapFactory.Options();
         op.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(filePath, op);
+        decoder.decode(op);
         if (op.outWidth == -1 || op.outHeight == -1) return null;
 
         int maxAllowedImageVolume = ViewerPreferenceManager.INSTANCE.getMaxImageSize();
@@ -286,7 +305,7 @@ public class ImageActivity extends AbstractActivity {
                 : 0);
         op.inJustDecodeBounds = false;
 
-        return BitmapFactory.decodeFile(filePath, op);
+        return decoder.decode(op);
 
     }
 

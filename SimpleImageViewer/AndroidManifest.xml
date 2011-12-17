@@ -19,6 +19,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.OPENABLE" />
                 <data android:scheme="file" android:mimeType="image/*"/>
+                <data android:scheme="content" android:mimeType="image/*"/>
             </intent-filter>
         </activity>
         <activity android:name="ViewerPreferenceActivity"></activity>
